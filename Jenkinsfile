@@ -22,6 +22,7 @@ pipeline {
                 echo 'Deploy Application'
             }
         }
+    }
     post {
         success {
             echo 'Pipeline succeeded! Deploying...'
