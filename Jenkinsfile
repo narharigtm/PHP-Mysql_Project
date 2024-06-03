@@ -2,35 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Application') {
+        stage('Clone') {
             steps {
-                echo 'Hello World'
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/narharigtm/PhpMysql_project.git']])
             }
         }
-        stage('Build Application') {
-            steps {
-                echo 'Hello World'
-            }
-        }
-        stage('Test Application') {
-            steps {
-                echo 'Test Application'
-            }
-        }
-        stage('Deploy Application') {
-            steps {
-                echo 'Deploy Application'
+        stage('build & run'){
+            steps{
+                sh 'docker-compose up -d'
+                sh 'docker ps'
             }
         }
     }
     post {
         success {
-            echo 'Pipeline succeeded! Deploying...'
+            echo 'Pipeline succeeded!'
+            sh 'docker-compose down'
         }
         failure {
-            echo 'Pipeline failed! Sending notifications...'
+            echo 'Pipeline failed!'
+            sh 'docker-compose down'
         }
-        
     }
-
 }
